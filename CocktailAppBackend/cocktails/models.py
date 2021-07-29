@@ -19,3 +19,17 @@ class Review(models.Model):
 class FavoritesList(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
     cocktail_id = models.CharField(max_length=50)
+
+
+class Ingredients(models.Model):
+    type = models.CharField(max_length=50)
+    description = models.CharField(max_length=250)
+
+
+class CustomDrink(models.Model):
+    name = models.CharField(max_length=50)
+    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    ingredient_1 = models.ForeignKey(Ingredients, blank=True, null=True, on_delete=models.CASCADE)
+    ingredient_2 = models.ForeignKey(Ingredients, blank=True, null=True, on_delete=models.CASCADE)
+    ingredient_3 = models.ForeignKey(Ingredients, blank=True, null=True, on_delete=models.CASCADE)
+
