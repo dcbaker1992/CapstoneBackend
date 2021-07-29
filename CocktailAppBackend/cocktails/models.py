@@ -12,7 +12,7 @@ class User(models.Model):
 class Review(models.Model):
     cocktail_id = models.CharField(max_length=50)
     review_text = models.CharField(max_length=500)
-    rating = models.IntegerField(max_length=5)
+    rating = models.IntegerField()
     reviewer = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
 
 
@@ -29,7 +29,7 @@ class Ingredients(models.Model):
 class CustomDrink(models.Model):
     name = models.CharField(max_length=50)
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
-    ingredient_1 = models.ForeignKey(Ingredients, blank=True, null=True, on_delete=models.CASCADE)
-    ingredient_2 = models.ForeignKey(Ingredients, blank=True, null=True, on_delete=models.CASCADE)
-    ingredient_3 = models.ForeignKey(Ingredients, blank=True, null=True, on_delete=models.CASCADE)
+    ingredient_1 = models.ForeignKey(Ingredients, related_name='liquor_1', blank=True, null=True, on_delete=models.CASCADE)
+    ingredient_2 = models.ForeignKey(Ingredients, related_name='liquor_2', blank=True, null=True, on_delete=models.CASCADE)
+    ingredient_3 = models.ForeignKey(Ingredients, related_name='liquor_3', blank=True, null=True, on_delete=models.CASCADE)
 
