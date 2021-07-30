@@ -9,27 +9,19 @@ class User(models.Model):
     password = models.CharField(max_length=25)
 
 
+class Ingredient(models.Model):
+    type = models.CharField(max_length=250, unique=True)
+
+
+class Cocktail(models.Model):
+    name = models.CharField(max_length=50)
+    ingredients = models.ManyToManyField(Ingredient, blank=True)
+    preparation = models.TextField(null=True)
+    creator = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+
+
 class Review(models.Model):
-    cocktail_id = models.CharField(max_length=50)
+    cocktail = models.ForeignKey(Cocktail, blank=True, null=True, on_delete=models.CASCADE)
     review_text = models.CharField(max_length=500)
     rating = models.IntegerField()
     reviewer = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
-
-
-class FavoritesList(models.Model):
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
-    cocktail_id = models.CharField(max_length=50)
-
-
-class Ingredients(models.Model):
-    type = models.CharField(max_length=50)
-    description = models.CharField(max_length=250)
-
-
-class CustomDrink(models.Model):
-    name = models.CharField(max_length=50)
-    user = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
-    ingredient_1 = models.ForeignKey(Ingredients, related_name='liquor_1', blank=True, null=True, on_delete=models.CASCADE)
-    ingredient_2 = models.ForeignKey(Ingredients, related_name='liquor_2', blank=True, null=True, on_delete=models.CASCADE)
-    ingredient_3 = models.ForeignKey(Ingredients, related_name='liquor_3', blank=True, null=True, on_delete=models.CASCADE)
-

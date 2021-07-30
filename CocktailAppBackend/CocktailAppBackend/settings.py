@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'cocktails.apps.CocktailsConfig',
+    'corsheaders'
 
 ]
 
@@ -47,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'CocktailAppBackend.urls'
@@ -116,3 +118,5 @@ try:
     from CocktailAppBackend.local_settings import *
 except ImportError:
     pass
+
+CORS_ORIGIN_ALLOW_ALL=True
