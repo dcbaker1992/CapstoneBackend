@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from .models import Cocktail, Collection
+from .models import Cocktail, Collection, User
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', "fullName", 'Username', "Password", 'email', "phone_number"]
 
 
 class CocktailSerializer(serializers.ModelSerializer):

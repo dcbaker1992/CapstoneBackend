@@ -1,11 +1,43 @@
 from django.shortcuts import render
-from .models import Cocktail, Collection
-from .serializers import CocktailSerializer, CollectionSerializer
+from .models import Cocktail, Collection, User
+from .serializers import CocktailSerializer, CollectionSerializer, UserSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
 
+
+class User_list(APIView):
+
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Login(APIView):
+
+    def get_users(self):
+        users = list(User.objects.all().values())
+        return users
+
+    def post(self, request):
+        users = self.get_users()
+
+        print(users)
+        for user in users:
+            print(user)
+            print(request.data['Username'])
+            if request.data['Username'] == user['Username'] and request.data['Password'] == user['Password']:
+                print("logged in")
+                return Response(user)
 
 
 class CocktailList(APIView):
@@ -25,33 +57,32 @@ class CocktailList(APIView):
 
 class CocktailDetails(APIView):
 
-    def get_object(self, pk):
+    def get_cocktail(self, pk):
         try:
             return Cocktail.objects.get(pk=pk)
         except Cocktail.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk):
+    def get(self, request, pk, collection_id):
         try:
-            cocktail = self.get_object(pk)
+            cocktail = self.get_cocktail(pk)
             serializer = CocktailSerializer(cocktail)
             return Response(serializer.data)
         except Cocktail.DoesNotExist:
             raise Http404
 
-    def put(self, request, pk):
-        cocktail = self.get_object(pk)
+    def put(self, request, pk, collection_id):
+        cocktail = self.get_cocktail(pk)
         serializer = CocktailSerializer(cocktail, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk):
-        cocktail = self.get_object(pk)
+    def delete(self, request, pk, collection_id):
+        cocktail = self.get_cocktail(pk)
         cocktail.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 
 class CollectionList(APIView):
@@ -67,6 +98,7 @@ class CollectionList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class CocktailsInCollection(APIView):
 
@@ -91,6 +123,5 @@ class CollectionDetails(APIView):
 
     def delete(self, request, pk):
         collection = self.get_collection(pk)
-        serializer = CollectionSerializer(collection)
         collection.delete()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_204_NO_CONTENT)
