@@ -5,7 +5,7 @@ from .models import Cocktail, Collection, User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', "fullName", 'Username', "Password", 'email', "phone_number"]
+        fields = ['id', "fullName", 'userName', "password", 'email', "phone_number"]
 
 
 class CocktailSerializer(serializers.ModelSerializer):

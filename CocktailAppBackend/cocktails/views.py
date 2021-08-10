@@ -34,8 +34,8 @@ class Login(APIView):
         print(users)
         for user in users:
             print(user)
-            print(request.data['Username'])
-            if request.data['Username'] == user['Username'] and request.data['Password'] == user['Password']:
+            print(request.data['userName'])
+            if request.data['userName'] == user['userName'] and request.data['password'] == user['password']:
                 print("logged in")
                 return Response(user)
 
